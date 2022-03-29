@@ -1,65 +1,117 @@
 <h1>Añade un nuevo producto</h1>
-<div class="col-md-6 mb-3">
-  <form action="" method="post" id="form-new-product">
-    <div class="form-group">
-      <label for="nombre">Nombre del producto</label>
-      <input class="form-control" name='nombre' type='text' id='nombre' required>
-    </div>
-    <div class="form-group">
-      <label for="precio">Precio del producto</label>
-      <input class="form-control" name='precio' id='precio' required type='number'>
-    </div>
-    <div class="form-group">
-      <label for="img">URL a Imagen del Producto</label>
-      <input class="form-control" name='img' required id='img' type='url' pattern="https://.*">
-    </div>
-    <div class="form-group">
-      <label for="stock">Stock disponible</label>
-      <input class="form-control" name='stock' type='number' id='stock' required>
-    </div>
-    <div>
-      <button type="submit" class="btn btn-primary" id="send-new">Enviar</button>
-    </div>
-  </form>
+<div class="row">
+  <div class="col-md-6 mb-3">
+    <form action="" method="post" id="form-new-product">
+      <div class="form-group">
+        <label for="nombre">Nombre del producto</label>
+        <input class="form-control" name='nombre' type='text' id='nombre' required>
+      </div>
+      <div class="form-group">
+        <label for="precio">Precio del producto</label>
+        <input class="form-control" name='precio' id='precio' required type='number'>
+      </div>
+      <div class="form-group">
+        <label for="img">URL a Imagen del Producto</label>
+        <input class="form-control" name='img' required id='img' type='url' pattern="https://.*">
+      </div>
+      <div class="form-group">
+        <label for="stock">Stock disponible</label>
+        <input class="form-control" name='stock' type='number' id='stock' required>
+      </div>
+      <div class="form-group">
+        <label for="stock">Código del producto</label>
+        <input class="form-control" name='codigo' type='text' id='codigo' required>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary" id="send-new">Enviar</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <hr>
 <h1>Lista de productos</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Nombre</th>
-      <th scope="col">Precio</th>
-      <th scope="col">Imagen</th>
-    </tr>
-  </thead>
-  <tbody id="tbody">
-    {{!-- {{#each objProductos}}
-      <tr>
-        <td>{{this.nombre}}</td>
-        <td>{{this.precio}}</td>
-        <td><img src="{{this.img}}" alt="{{this.nombre}}"></td>
-      </tr>
-    {{/each}} --}}
-  </tbody>
-
-</table>
+<div class="row">
+  <div class="col-12">
+    <div class="table-responsive" style="max-height: 400px;">
+      <table class="table table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Imagen</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          {{!-- {{#each objProductos}}
+            <tr>
+              <td>{{this.nombre}}</td>
+              <td>{{this.precio}}</td>
+              <td><img src="{{this.img}}" alt="{{this.nombre}}"></td>
+            </tr>
+          {{/each}} --}}
+        </tbody>
+        <tfoot>
+          <tr class="table-dark">
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Imagen</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
 
 <hr>
 
 <h1>Centro de mensajes</h1>
 
 <form action="" id="mensajes-form">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="nombre-msg">Tu nombre</label>
+        <input type="text" name="nombre-msg" id="nombre-msg" placeholder="Escribe tu nombre" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="apellido-msg">Tu apellido</label>
+        <input type="text" name="apellido-msg" id="apellido-msg" placeholder="Escribe tu apellido" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="edad-msg">Tu edad</label>
+        <input type="text" name="edad-msg" id="edad-msg" placeholder="Escribe tu edad" class="form-control">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="email-msg">Tu correo</label>
+        <input type="email" name="email-msg" id="email-msg" placeholder="Escribe tu correo" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="alias-msg">Tu alias</label>
+        <input type="text" name="alias-msg" id="alias-msg" placeholder="Escribe tu alias" class="form-control">
+      </div>
+    </div>
+  </div>
   <div class="form-group">
-    <label for="email-msg">Tu correo</label>
-    <input type="email" name="email-msg" id="email-msg" placeholder="Escribe tu correo" class="form-control">
+    <label for="img-avatar">URL a Imagen de Avatar</label>
+    <input class="form-control" name='img-avatar' required id='img-avatar' type='url' pattern="https://.*">
   </div>
   <div class="form-group">
     <label for="mensaje">Tu mensaje</label>
-    <input type="text" name="mensaje" id="mensaje" class="form-control">
+    <input type="text" name="mensaje" id="mensaje" class="form-control" placeholder="Escribe un mensaje">
   </div>
-  <button type="submit" class="btn btn-primary" id="send-msg" name="send-msg" placeholder="Escribe un mensaje">Enviar mensaje</button>
+  <button type="submit" class="btn btn-primary" id="send-msg" name="send-msg">Enviar mensaje</button>
 
 </form>
 

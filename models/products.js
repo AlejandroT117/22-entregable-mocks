@@ -46,7 +46,7 @@ class Contenedor {
   async save(new_object) {
     try {
       const producto = await this.model.create(new_object);
-      console.log("-----");
+      console.log("---NUEVO PRODUCTO--");
       console.log(JSON.stringify(producto, null, 2));
 
       return producto;

@@ -1,7 +1,7 @@
 module.exports={
-  HOSTNAME: 'alejandrot117',
+  HOSTNAME: 'coderhouse',
   SCHEMA: 'mongodb+srv',
   DATABASE:'ecommerce', 
-  DBPORT: 'oUfdBycSrG7SCa4g@cluster0.yi6w4.mongodb.net',
+  DBPORT: 'vB5WYc1vdurBbR7y@cluster0.yi6w4.mongodb.net',
   OPTIONS: 'retryWrites=true&w=majority'
 }
