@@ -6,8 +6,9 @@ class Cont_Mensajes{
   constructor(){
     const schema = new mongoose.Schema(
       {
+        //id
         author:{
-          email: String,
+          email: String, //id
           nombre: String,
           apellido: String,
           edad: String,

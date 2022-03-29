@@ -18,8 +18,9 @@
     "moment": "^2.29.1",
     "mongoose": "^6.2.9",
     "node-fetch": "^3.2.2",
+    "normalizr": "^3.6.2",
     "socket.io": "^4.4.1",
-    "normalizr": "^3.6.2"
+    "util": "^0.12.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

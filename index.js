@@ -10,6 +10,9 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server);
 
+const { normalize, denormalize, schema } = require("normalizr");
+const { print } = require("./util");
+
 const productos = require("./models/products");
 const mensajes = require("./models/messages");
 
@@ -66,11 +69,23 @@ const { engine } = require("express-handlebars");
         socket.broadcast.emit("producto", { ...product });
       });
 
-      /* Normalizr */
-      
+      /* Schemas para Normalizr para mensajes*/
+      const author = new schema.Entity("authors", {}, { idAttribute: "email" });
+      const post = new schema.Entity(
+        "posts",
+        {
+          author: author,
+        },
+        { idAttribute: "_id" }
+      );
+
+      const blogSchema = new schema.Entity("blogs", {
+        posts: [post],
+      });
 
       /* Obtiene todos los mensajes de sqlite3 y los emite */
       mensajes.getAll().then((all_mens) => {
+        let blog = { id: 1, posts: [] };
         for (const m of Object.entries(all_mens)) {
           socket.emit("mensaje", {
             email: m[1].author.email,
@@ -78,7 +93,25 @@ const { engine } = require("express-handlebars");
             fecha: m[1].fecha,
             mensaje: m[1].mensaje,
           });
+          
+          /* Datos para normalizar */
+          const post = {
+            author: m[1].author,
+            _id: m[1]._id,
+            mensaje: m[1].mensaje,
+            fecha: m[1].fecha
+          }
+          blog.posts.push(post);
         }
+
+        /* Normalización */
+        const normalizedData = normalize(blog, blogSchema);
+        const lengths = {
+          denormalized: JSON.stringify(all_mens).length,
+          normalized: JSON.stringify(normalizedData.entities.posts).length
+        }
+        socket.emit('normalizeMsgs', normalizedData)
+        socket.emit('calculation', lengths)
       });
 
       /* Responde a la adición de un nuevo mensaje */

@@ -22,6 +22,8 @@ const mesForm = document.getElementById('mensajes-form')
 
 const macroCard = document.getElementById('macro-card')
 
+const compressionSpan = document.getElementById('compression')
+
 const user = {}
 //iniciar socket i
 user.socket = io()
@@ -133,3 +135,35 @@ mesForm.addEventListener('submit', (e)=>{
 
   user.socket.emit('new_message', new_message)
 })
+
+user.socket.on('normalizeMsgs', renderNormalize)
+
+function renderNormalize (normalizedData){
+  console.log(normalizedData)
+  /* Normalizr para mensajes*/
+  const author = new normalizr.schema.Entity("authors", {}, { idAttribute: "email" });
+  const post = new normalizr.schema.Entity(
+    "posts",
+    {
+      author: author,
+    },
+    { idAttribute: "_id" }
+  );
+
+  const blogSchema = new normalizr.schema.Entity("blogs", {
+    posts: [post],
+  });
+
+  //
+  const denormalizedData = normalizr.denormalize('62425b5256ca08ed3fde8b05', post, normalizedData.entities)
+
+  console.log(denormalizedData)
+}
+
+user.socket.on('calculation', renderLengths)
+
+function renderLengths(lengths) {
+  const percentage= Math.floor(lengths.normalized/lengths.denormalized*100)
+
+ compressionSpan.innerHTML  = percentage
+}
