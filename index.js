@@ -3,6 +3,9 @@ const app = express();
 const path = require("path");
 const http = require("http");
 const PORT = process.env.PORT || 8080;
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const MongoStore = require('connect-mongo')
 
 const mongoose = require("mongoose");
 const { HOSTNAME, SCHEMA, DATABASE, DBPORT, OPTIONS } = require("./config");
@@ -42,6 +45,14 @@ const { engine } = require("express-handlebars");
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use("/static", express.static(path.join(__dirname, "/public")));
+    app.use(cookieParser('secret'))
+    app.use(
+      session({
+        secret:'secreto',
+        resave:true,
+        saveUninitialized:true
+      })
+    )
 
     /* Router al home */
     app.use("/", homeRouter);

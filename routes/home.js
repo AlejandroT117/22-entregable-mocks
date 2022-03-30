@@ -1,16 +1,18 @@
 const { Router } = require("express");
+const router = Router();
+
+const isLogged = require("../middlewares/logged");
+const counter = require("../middlewares/counter");
 
 const productos = require("../models/products");
 
-const router = Router();
-
 /* GET DATA */
 
-router.get("/", async (req, res) => {
-  res.render("main");
+router.get("/",isLogged, async (req, res) => {
+  res.render("main", {username: req.cookies.username});
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/unique/:id", isLogged, async (req, res) => {
   const { id } = req.params;
 
   const producto = await productos.getById(id);
@@ -22,6 +24,40 @@ router.get("/:id", async (req, res) => {
     img: producto.img,
     descuento: producto.descuento,
   });
+});
+
+router.get("/login", (req, res) => {
+  res.render("login");
+});
+
+router.post("/register", (req, res) => {
+
+  res.cookie("username", req.body.nombre);
+  req.session.user={
+    name: req.body.nombre,
+    email: req.body.email
+  }
+
+  res.redirect("/")
+});
+
+router.get("/counter", counter, (req, res) => {
+  res.render("counter", {contador: req.session.contador});
+});
+
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect("/?error=err");
+    }
+
+    res.redirect("/bye");
+  });
+});
+
+router.get("/bye", (req, res) => {
+  res.render("bye", {username: req.cookies.username});
+  res.clearCookie("username");
 });
 
 module.exports = router;
