@@ -48,6 +48,13 @@ const { engine } = require("express-handlebars");
     app.use(cookieParser('secret'))
     app.use(
       session({
+        store: MongoStore.create({
+          mongoUrl:`${SCHEMA}://${HOSTNAME}:${DBPORT}/${DATABASE}?${OPTIONS}`,
+          ttl: 10*60, //10 minutos para expiración
+          autoRemove: "interval",
+          autoRemoveInterval: 10
+        }),
+
         secret:'secreto',
         resave:true,
         saveUninitialized:true

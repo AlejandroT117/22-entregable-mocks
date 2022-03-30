@@ -8,11 +8,11 @@ const productos = require("../models/products");
 
 /* GET DATA */
 
-router.get("/",isLogged, async (req, res) => {
+router.get("/",isLogged, counter, async (req, res) => {
   res.render("main", {username: req.cookies.username});
 });
 
-router.get("/unique/:id", isLogged, async (req, res) => {
+router.get("/unique/:id", isLogged, counter, async (req, res) => {
   const { id } = req.params;
 
   const producto = await productos.getById(id);
@@ -45,7 +45,7 @@ router.get("/counter", counter, (req, res) => {
   res.render("counter", {contador: req.session.contador});
 });
 
-router.get("/logout", (req, res) => {
+router.get("/logout", isLogged, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.redirect("/?error=err");

@@ -2,7 +2,9 @@ const {Router} = require('express')
 const router = Router()
 const faker = require('faker')
 
-router.get('/', async (req,res)=>{
+const counter = require("../middlewares/counter");
+
+router.get('/', counter, async (req,res)=>{
   let lista = []
     for (let i = 0; i < 5; i++) {
       const producto={
