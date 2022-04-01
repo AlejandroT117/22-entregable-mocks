@@ -3,8 +3,9 @@ const router = Router()
 const faker = require('faker')
 
 const counter = require("../middlewares/counter");
+const isLogged = require("../middlewares/logged");
 
-router.get('/', counter, async (req,res)=>{
+router.get('/', counter,isLogged,  async (req,res)=>{
   let lista = []
     for (let i = 0; i < 5; i++) {
       const producto={

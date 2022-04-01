@@ -41,7 +41,7 @@ router.post("/register", (req, res) => {
   res.redirect("/")
 });
 
-router.get("/counter", counter, (req, res) => {
+router.get("/counter", isLogged, counter, (req, res) => {
   res.render("counter", {contador: req.session.contador});
 });
 
