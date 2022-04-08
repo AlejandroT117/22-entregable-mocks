@@ -16,6 +16,11 @@ const io = new Server(server);
 const { normalize, denormalize, schema } = require("normalizr");
 const { print } = require("./util");
 
+//passport
+const passport = require('passport')
+const flash = require('express-flash')
+const initializePassport = require('./passport/local')
+
 const productos = require("./models/products");
 const mensajes = require("./models/messages");
 
@@ -31,6 +36,7 @@ const { engine } = require("express-handlebars");
     await mongoose.connect(
       `${SCHEMA}://${HOSTNAME}:${DBPORT}/${DATABASE}?${OPTIONS}`
     );
+    console.log(`${SCHEMA}://${HOSTNAME}:${DBPORT}/${DATABASE}?${OPTIONS}`)
 
     app.engine(
       "handlebars",
@@ -59,6 +65,12 @@ const { engine } = require("express-handlebars");
         saveUninitialized:true
       })
     )
+
+    //passport initialize
+    initializePassport(passport)
+    app.use(flash())
+    app.use(passport.initialize())
+    app.use(passport.session())
 
     /* Router al home */
     app.use("/", homeRouter);
