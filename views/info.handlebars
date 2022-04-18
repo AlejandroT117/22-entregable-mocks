@@ -1,0 +1,16 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Info</th>
+    </tr>
+  </thead>
+  <tbody id="tb">
+    {{#each info}}
+      <tr>
+        <td>{{this.nombre}}</td>
+        <td>{{this.data}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

@@ -6,12 +6,29 @@ const counter = require("../middlewares/counter");
 
 const productos = require("../models/products");
 const passport = require("passport");
+const calc = require('../utils/calc')
+
+/* info route */
+router.get("/info", isLogged, (req, res) => {
+  const info = [
+    { nombre: "Argumentos de entrada", data: process.argv },
+    { nombre: "Nombre de plataforma", data: process.platform },
+    { nombre: "Versión de Node.js", data: process.version },
+    { nombre: "Memoria total", data: calc.bytesToMb(process.memoryUsage().rss) },
+    { nombre: "Path de ejecución", data: process.execPath },
+    { nombre: "Process id", data: process.pid },
+    { nombre: "Carpeta del proyecto", data: process.cwd() },
+  ];
+
+  res.render("info", {info})
+});
+
 
 /* GET DATA */
 
 router.get("/", isLogged, counter, async (req, res) => {
-  const { firstname, lastname } = req.user
-  res.cookie('username', `${firstname} ${lastname}`)
+  const { firstname, lastname } = req.user;
+  res.cookie("username", `${firstname} ${lastname}`);
   res.render("main", { username: `${firstname} ${lastname}` });
 });
 
@@ -37,29 +54,35 @@ router.get("/register", (req, res) => {
   res.render("register");
 });
 
-router.post("/login", passport.authenticate("login", {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-}));
+router.post(
+  "/login",
+  passport.authenticate("login", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
+);
 
-router.post("/register", passport.authenticate("register", {
-  successRedirect: '/',
-  failureRedirect: '/register',
-  failureFlash: true
-}));
+router.post(
+  "/register",
+  passport.authenticate("register", {
+    successRedirect: "/",
+    failureRedirect: "/register",
+    failureFlash: true,
+  })
+);
 
 router.get("/counter", isLogged, counter, (req, res) => {
   res.render("counter", { contador: req.session.contador });
 });
 
 router.get("/logout", isLogged, (req, res) => {
-  req.logOut()
+  req.logOut();
   res.redirect("/bye");
 });
 
 router.get("/bye", (req, res) => {
-  res.render("bye", {username: req.cookies.username});
+  res.render("bye", { username: req.cookies.username });
   res.clearCookie("username");
 });
 

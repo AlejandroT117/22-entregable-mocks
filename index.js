@@ -2,13 +2,22 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const http = require("http");
-const PORT = process.env.PORT || 8080;
+
+/* Dotenv */
+const dotenv = require('dotenv')
+dotenv.config({
+  path: path.resolve(__dirname, '.env')
+})
+/* Yargs */
+const yargs = require('./config/yargs')
+
+const PORT = yargs().port;
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const MongoStore = require('connect-mongo')
 
 const mongoose = require("mongoose");
-const { HOSTNAME, SCHEMA, DATABASE, DBPORT, OPTIONS } = require("./config");
+const { HOSTNAME, SCHEMA, DATABASE, USER, PASSWORD, OPTIONS  } = require("./config");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server);
@@ -27,6 +36,7 @@ const mensajes = require("./models/messages");
 //Routes set
 const homeRouter = require("./routes/home");
 const fakerRouter = require("./routes/faker");
+const randomRouter = require("./routes/random");
 
 //Handlebars set
 const { engine } = require("express-handlebars");
@@ -34,9 +44,9 @@ const { engine } = require("express-handlebars");
 (async () => {
   try {
     await mongoose.connect(
-      `${SCHEMA}://${HOSTNAME}:${DBPORT}/${DATABASE}?${OPTIONS}`
+      `${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`
     );
-    console.log(`${SCHEMA}://${HOSTNAME}:${DBPORT}/${DATABASE}?${OPTIONS}`)
+    console.log(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`)
 
     app.engine(
       "handlebars",
@@ -55,7 +65,7 @@ const { engine } = require("express-handlebars");
     app.use(
       session({
         store: MongoStore.create({
-          mongoUrl:`${SCHEMA}://${HOSTNAME}:${DBPORT}/${DATABASE}?${OPTIONS}`,
+          mongoUrl:`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`,
           ttl: 10*60, //10 minutos para expiración
           autoRemove: "native"
         }),
@@ -75,6 +85,7 @@ const { engine } = require("express-handlebars");
     /* Router al home */
     app.use("/", homeRouter);
     app.use("/api/productos-test", fakerRouter);
+    app.use("/api/randoms", randomRouter);
 
     //socket io
     io.on("connection", (socket) => {
