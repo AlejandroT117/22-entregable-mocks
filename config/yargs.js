@@ -6,11 +6,18 @@ module.exports =()=>{
       alias: 'p',
       describe: 'server port',
       default: 8080,
-      type:'string'
+      type: 'number'
+    })
+    .option('modo',{
+      alias: 'm',
+      describe: 'modo',
+      default: 'FORK',
+      type:'string',
+      choices: ['FORK', 'CLUSTER']
     })
     .argv
   
-  const { port } = args
+  const { port, modo } = args
 
-  return {port}
+  return {port, modo}
 }

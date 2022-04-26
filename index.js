@@ -12,6 +12,7 @@ dotenv.config({
 const yargs = require('./config/yargs')
 
 const PORT = yargs().port;
+const MODO = yargs().modo;
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const MongoStore = require('connect-mongo')
@@ -168,10 +169,11 @@ const { engine } = require("express-handlebars");
       res.status(500).send("Error en middleware");
     });
 
-    server.listen(PORT, () =>
+    /* server.listen(PORT, () =>
       console.log(`Escuchando en: http://localhost:${PORT}`)
-    );
+    ); */
   } catch (e) {
     console.log(`Error en conexión: ${e}`);
   }
 })();
+module.exports = server

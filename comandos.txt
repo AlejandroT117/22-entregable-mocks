@@ -1,0 +1,28 @@
+//Ejecutar el servidor (modos FORK y CLUSTER) con nodemon verificando el 
+	número de procesos tomados por node.
+	
+	//modo cluster
+	npm run nodemon:cluster
+	//modo fork
+	npm run nodemon:fork
+
+
+//Ejecutar el servidor (con los parámetros adecuados) utilizando Forever, 
+verificando su correcta operación. Listar los procesos por Forever y por sistema operativo.
+
+	//start forever
+	npm run forever
+	//listar procesos
+	npx forever list
+	//detener todo
+	npx forever stopall
+
+
+
+//Ejecutar el servidor (con los parámetros adecuados: modo FORK) utilizando PM2 en sus modos modo fork y cluster. 
+Listar los procesos por PM2 y por sistema operativo.
+
+	//modo fork
+	npm run pm2:fork
+	//modo cluster
+	npm run pm2:cluster

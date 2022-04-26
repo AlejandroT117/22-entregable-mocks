@@ -6,7 +6,8 @@ const counter = require("../middlewares/counter");
 
 const productos = require("../models/products");
 const passport = require("passport");
-const calc = require('../utils/calc')
+const calc = require('../utils/calc');
+const CPUs = require('os').cpus().length;
 
 /* info route */
 router.get("/info", isLogged, (req, res) => {
@@ -18,6 +19,7 @@ router.get("/info", isLogged, (req, res) => {
     { nombre: "Path de ejecución", data: process.execPath },
     { nombre: "Process id", data: process.pid },
     { nombre: "Carpeta del proyecto", data: process.cwd() },
+    { nombre: "No. procesadores", data: CPUs },
   ];
 
   res.render("info", {info})
