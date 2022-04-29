@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const fs = require("fs").promises;
 const path = require("path");
+/* logger */
+const logger = require('../log')
 
 class Contenedor {
   constructor() {
@@ -31,27 +33,25 @@ class Contenedor {
       const productos = JSON.parse(raw);
       let i = 0;
       for (const p of productos) {
-        console.log(p);
         await this.model.create(p);
         i++;
       }
 
-      console.log("data cargada en db");
+      logger.log("data cargada en db");
       return i;
     } catch (e) {
-      console.log(`Error cargando datos: ${e}`);
+      logger.error(`Error cargando datos: ${e}`);
     }
   }
 
   async save(new_object) {
     try {
       const producto = await this.model.create(new_object);
-      console.log("---NUEVO PRODUCTO--");
-      console.log(JSON.stringify(producto, null, 2));
+      logger.log(`Nuevo producto: ${JSON.stringify(producto, null, 2)}`);
 
       return producto;
     } catch (e) {
-      console.log(`Error creando producto: ${e}`);
+      logger.error(`Error creando producto: ${e}`);
       return e;
     }
   }
@@ -66,7 +66,7 @@ class Contenedor {
 
       return producto;
     } catch (e) {
-      console.log(`Error en get by id: ${e}`);
+      logger.error(`Error en get by id: ${e}`);
     }
   }
 
@@ -79,7 +79,7 @@ class Contenedor {
 
       return producto;
     } catch (e) {
-      console.log(e);
+      logger.error(e);
     }
   }
 
@@ -94,7 +94,7 @@ class Contenedor {
       } else {
         productos = await this.model.find(find);
       }
-      console.log(`No. de productos: ${productos.length}`);
+      logger.info(`No. de productos: ${productos.length}`);
 
       return productos.map((p) => {
         return {
@@ -107,7 +107,7 @@ class Contenedor {
         };
       });
     } catch (e) {
-      console.log(`Error en get all ${e}`);
+      logger.error(`Error en get all ${e}`);
     }
   }
 
@@ -116,7 +116,7 @@ class Contenedor {
       const borrado = await this.model.deleteOne({ _id: id });
       return borrado;
     } catch (e) {
-      console.log(`Error en borrado por id ${e}`);
+      logger.error(`Error en borrado por id ${e}`);
     }
   }
 
@@ -125,7 +125,7 @@ class Contenedor {
       const producto = await this.model.deleteMany({});
       return producto;
     } catch (e) {
-      console.log(`Error borrando todos los productos ${e}`);
+      logger.error(`Error borrando todos los productos ${e}`);
     }
   }
 }

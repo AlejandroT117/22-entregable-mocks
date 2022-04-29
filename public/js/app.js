@@ -83,7 +83,6 @@ form.addEventListener('submit', (e)=>{
 user.socket.on('mensaje', renderMensaje)
 
 function renderMensaje(m) {
-  //console.log(m)
   //body Div
   const bodyDiv = document.createElement('div')
   bodyDiv.classList.add('card-body')

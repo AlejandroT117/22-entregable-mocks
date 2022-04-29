@@ -2,17 +2,13 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const http = require("http");
-
+/* logger */
+const logger = require('./log')
 /* Dotenv */
 const dotenv = require('dotenv')
 dotenv.config({
   path: path.resolve(__dirname, '.env')
 })
-/* Yargs */
-const yargs = require('./config/yargs')
-
-const PORT = yargs().port;
-const MODO = yargs().modo;
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const MongoStore = require('connect-mongo')
@@ -24,7 +20,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const { normalize, denormalize, schema } = require("normalizr");
-const { print } = require("./util");
+const printInfo = require("./middlewares/printInfo")
 
 //passport
 const passport = require('passport')
@@ -47,7 +43,7 @@ const { engine } = require("express-handlebars");
     await mongoose.connect(
       `${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`
     );
-    console.log(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`)
+    logger.log(`URL Mongo: ${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`)
 
     app.engine(
       "handlebars",
@@ -84,13 +80,19 @@ const { engine } = require("express-handlebars");
     app.use(passport.session())
 
     /* Router al home */
-    app.use("/", homeRouter);
+    app.use("/", printInfo, homeRouter);
     app.use("/api/productos-test", fakerRouter);
     app.use("/api/randoms", randomRouter);
 
+    /* unexistant */
+    /* app.get('*', (req, res) => {
+      logger.warn('La ruta no existe')
+      res.redirect('/')
+    }) */
+
     //socket io
     io.on("connection", (socket) => {
-      console.log(`An user is connected: ${socket.id}`);
+      logger.log(`An user is connected by socket: ${socket.id}`);
 
       /* Obtiene todos los productos de la db SQL y los emite */
       productos.getAll().then((all_p) => {
@@ -146,26 +148,33 @@ const { engine } = require("express-handlebars");
         }
 
         /* Normalización */
-        const normalizedData = normalize(blog, blogSchema);
-        const lengths = {
-          denormalized: JSON.stringify(all_mens).length,
-          normalized: JSON.stringify(normalizedData.entities.posts).length
+        if(all_mens.length){
+          const normalizedData = normalize(blog, blogSchema);
+          const lengths = {
+            denormalized: JSON.stringify(all_mens).length,
+            normalized: JSON.stringify(normalizedData.entities.posts).length
+          }
+          socket.emit('normalizeMsgs', normalizedData)
+          socket.emit('calculation', lengths)
         }
-        socket.emit('normalizeMsgs', normalizedData)
-        socket.emit('calculation', lengths)
       });
 
       /* Responde a la adición de un nuevo mensaje */
       socket.on("new_message", (message) => {
         mensajes.save({ ...message });
-        socket.emit("mensaje", { ...message });
+        socket.emit("mensaje", {
+          email: message.author.email,
+          avatar: message.author.avatar,
+          fecha: message.fecha,
+          mensaje: message.mensaje,
+        });
         socket.broadcast.emit("mensaje", { ...message });
       });
     });
 
     //manejo de errores
     app.use((err, req, res, next) => {
-      console.log(err.stack);
+      logger.error(err.stack);
       res.status(500).send("Error en middleware");
     });
 
@@ -173,7 +182,7 @@ const { engine } = require("express-handlebars");
       console.log(`Escuchando en: http://localhost:${PORT}`)
     ); */
   } catch (e) {
-    console.log(`Error en conexión: ${e}`);
+    logger.error(`Error en conexión: ${e}`);
   }
 })();
 module.exports = server

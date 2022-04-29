@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const router = Router();
+const compression = require('compression')
 
 const isLogged = require("../middlewares/logged");
 const counter = require("../middlewares/counter");
@@ -8,9 +9,11 @@ const productos = require("../models/products");
 const passport = require("passport");
 const calc = require('../utils/calc');
 const CPUs = require('os').cpus().length;
+/* logger */
+const logger = require('../log')
 
 /* info route */
-router.get("/info", isLogged, (req, res) => {
+router.get("/info", isLogged, compression(), (req, res) => {
   const info = [
     { nombre: "Argumentos de entrada", data: process.argv },
     { nombre: "Nombre de plataforma", data: process.platform },
@@ -28,7 +31,7 @@ router.get("/info", isLogged, (req, res) => {
 
 /* GET DATA */
 
-router.get("/", isLogged, counter, async (req, res) => {
+router.get("/", isLogged, counter, compression(), async (req, res) => {
   const { firstname, lastname } = req.user;
   res.cookie("username", `${firstname} ${lastname}`);
   res.render("main", { username: `${firstname} ${lastname}` });
@@ -38,7 +41,7 @@ router.get("/unique/:id", isLogged, counter, async (req, res) => {
   const { id } = req.params;
 
   const producto = await productos.getById(id);
-  console.log(producto);
+  logger.log(producto);
 
   res.render("unique", {
     nombre: producto.nombre,

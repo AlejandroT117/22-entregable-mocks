@@ -1,0 +1,12 @@
+undefined
+04-29-2022 18:23:57- error: TypeError: randomize is not a function
+    at D:\Coderhouse\backend_js\22-entregable-mocks\routes\random.js:13:12
+    at Layer.handle [as handle_request] (D:\Coderhouse\backend_js\22-entregable-mocks\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Coderhouse\backend_js\22-entregable-mocks\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (D:\Coderhouse\backend_js\22-entregable-mocks\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (D:\Coderhouse\backend_js\22-entregable-mocks\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Coderhouse\backend_js\22-entregable-mocks\node_modules\express\lib\router\index.js:281:22
+    at Function.process_params (D:\Coderhouse\backend_js\22-entregable-mocks\node_modules\express\lib\router\index.js:341:12)
+    at next (D:\Coderhouse\backend_js\22-entregable-mocks\node_modules\express\lib\router\index.js:275:10)
+    at Function.handle (D:\Coderhouse\backend_js\22-entregable-mocks\node_modules\express\lib\router\index.js:174:3)
+    at router (D:\Coderhouse\backend_js\22-entregable-mocks\node_modules\express\lib\router\index.js:47:12)

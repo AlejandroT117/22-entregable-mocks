@@ -4,19 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "forever":"forever start --watch cluster.js",
-    "nodemon:fork":"nodemon cluster.js",
-    "nodemon:cluster":"nodemon cluster.js -- -m CLUSTER",
-    "pm2:fork":"pm2 start ./config/worker.config.js --watch",
-    "pm2:cluster":"pm2 start ./config/cluster.config.js --watch"
+    "forever": "forever start --watch cluster.js",
+    "nodemon:fork": "nodemon cluster.js",
+    "nodemon:cluster": "nodemon cluster.js -- -m CLUSTER",
+    "pm2:fork": "pm2 start ./config/worker.config.js --watch",
+    "pm2:cluster": "pm2 start ./config/cluster.config.js --watch",
+    "profiling": "node --prof cluster.js",
+    "test:artillery": "artillery quick --count=50 -n 20 http://localhost:8080/info > ./tests/result_artillery.txt",
+    "test:autocannon": "node ./tests/file.spec.js",
+    "0x": "0x cluster.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "artillery": "^2.0.0-14",
+    "autocannon": "^7.8.1",
     "bcrypt": "^5.0.1",
+    "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
@@ -34,6 +39,7 @@
     "passport-local": "^1.0.0",
     "socket.io": "^4.4.1",
     "util": "^0.12.4",
+    "winston": "^3.7.2",
     "yargs": "^17.4.1"
   },
   "devDependencies": {

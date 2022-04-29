@@ -1,3 +1,6 @@
+/* logger */
+const logger = require('../log')
+
 const random = (cant) => {
   if(!cant){
     cant= 100000000
@@ -12,8 +15,10 @@ const random = (cant) => {
   return numbers;
 };
 
+module.exports= random
+
 process.on("message", (obj) => {
-  console.log(`Consola del proceso hijo ${obj.message}`);
+  logger.log(`Consola del proceso hijo ${obj.message}`);
   if (obj.message === "start") {
     console.time("time")
     const numeros = random(obj.cant);

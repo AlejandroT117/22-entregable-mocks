@@ -1,5 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy
 const userModel = require('../models/user')
+/* logger */
+const logger = require('../log')
 
 module.exports = (passport) =>{
   const authenticateUser = async (email, password, done)=>{
@@ -48,7 +50,7 @@ module.exports = (passport) =>{
   passport.serializeUser((user, done)=> done(null, user.id))
   passport.deserializeUser(async (id, done) => {
     const user = await userModel.getById(id);
-    console.log(id)
+    logger.log(`Acceso a id: ${id}`)
     done(null, {
       id: user._id.toString(),
       email: user.email,

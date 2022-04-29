@@ -1,6 +1,8 @@
 const path = require('path')
 const fs = require('fs').promises
 const mongoose = require("mongoose");
+/* logger */
+const logger = require('../log')
 
 class Cont_Mensajes{
   constructor(){
@@ -28,10 +30,11 @@ class Cont_Mensajes{
   async save(new_object){
     try{      
       const result = await this.model.create(new_object);
+      logger.log(`New message: ${new_object}`)
 
       return result[0]
     }catch(e){
-      console.log(`Error creando producto: ${e}`);
+      logger.log(`Error creando producto: ${e}`);
     }
 
   }
@@ -46,7 +49,7 @@ class Cont_Mensajes{
 
       return obj
     }catch(e){
-      console.log(`Error en get by id: ${e}`);
+      logger.error(`Error en get by id: ${e}`);
     }
   }
 
@@ -56,15 +59,15 @@ class Cont_Mensajes{
       const mensajes = JSON.parse(raw)
       let i = 0;
       for(const m of mensajes){
-        console.log(m)
+        logger.log(m)
         await this.model.create(m);
         i++;
       }
   
-      console.log('data cargada a db')
+      logger.log('data cargada a db')
       return i;
     }catch(e){
-      console.log(`Error cargando datos: ${e}`);
+      logger.error(`Error cargando datos: ${e}`);
       throw e;
     }
   }
@@ -72,11 +75,11 @@ class Cont_Mensajes{
   async getAll() {
     try{
       const data = await this.model.find();
-      console.log(`No. de mensajes: ${data.length}`);
+      logger.log(`No. de mensajes: ${data.length}`);
 
       return data
     }catch(e){
-      console.log(e)
+      logger.error(e)
     }
   }
 
@@ -88,7 +91,7 @@ class Cont_Mensajes{
         );
     return msg
     }catch(e){
-      console.log(e);
+      logger.error(e);
     }
 
   }
@@ -98,18 +101,18 @@ class Cont_Mensajes{
       const borrado = await this.model.deleteOne({ _id: id });
       return borrado;
     }catch(e){  
-      console.log(`Error en borrado por id ${e}`);
+      logger.error(`Error en borrado por id ${e}`);
     }
   }
 
   async deleteAll(){
     try{
       const producto = await this.model.deleteMany({});
-      console.log('nueva tabla vacía creada')
+      logger.warn('Borrado total de la tabla Mensajes')
       return producto;
 
     }catch(e){
-      console.log(`Error borrando todos los productos ${e}`);
+      logger.error(`Error borrando todos los productos ${e}`);
     }
   }
 
