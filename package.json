@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node cluster.js",
     "forever": "forever start --watch cluster.js",
     "nodemon:fork": "nodemon cluster.js",
     "nodemon:cluster": "nodemon cluster.js -- -m CLUSTER",
