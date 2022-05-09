@@ -7,7 +7,7 @@ const app = require("./index")
 /* logger */
 const logger = require('./log')
 
-const PORT = yargs().port;
+const PORT = process.env.PORT || yargs().port;
 const MODO = yargs().modo;
 
 if(MODO==='CLUSTER'){
