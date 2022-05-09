@@ -19,7 +19,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server);
 
-const { normalize, denormalize, schema } = require("normalizr");
+const { normalize, schema } = require("normalizr");
 const printInfo = require("./middlewares/printInfo")
 
 //passport
