@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const fs = require("fs").promises;
 const path = require("path");
 /* logger */
-const logger = require('../log')
+const logger = require("../log");
 
 class Contenedor {
   constructor() {

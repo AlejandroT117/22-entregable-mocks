@@ -6,19 +6,15 @@ const myFormat = winston.format.combine(
   winston.format.timestamp({
     format: "MM-DD-YYYY HH:mm:ss",
   }),
-  printf((info) => 
-    `[${info.timestamp}] [${info.level}] ${info.message}`
-  )
+  printf((info) => `[${info.timestamp}] [${info.level}] ${info.message}`)
 );
 
 const fileFormat = winston.format.combine(
   winston.format.timestamp({
     format: "MM-DD-YYYY HH:mm:ss",
   }),
-  printf((info) => 
-    `${info.timestamp}- ${info.level}: ${info.message}`
-  )
-)
+  printf((info) => `${info.timestamp}- ${info.level}: ${info.message}`)
+);
 
 winston.addColors({
   info: "bold blue", // fontStyle color
@@ -38,12 +34,12 @@ const logger = winston.createLogger({
     new winston.transports.File({
       filename: "./logs/warns.log",
       level: "warn",
-      format: combine(fileFormat)
+      format: combine(fileFormat),
     }),
     new winston.transports.File({
       filename: "./logs/error.log",
       level: "error",
-      format: combine(fileFormat)
+      format: combine(fileFormat),
     }),
   ],
 });

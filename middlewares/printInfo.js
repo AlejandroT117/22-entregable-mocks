@@ -1,9 +1,8 @@
-
 /* logger */
-const logger = require('../log')
+const logger = require("../log");
 
-module.exports=(req,res, next)=>{
-  logger.log(`Route: ${req.url} - Method: ${req.method}`)
+module.exports = (req, res, next) => {
+  logger.log(`Route: ${req.url} - Method: ${req.method}`);
 
-  next()
-}
+  next();
+};
